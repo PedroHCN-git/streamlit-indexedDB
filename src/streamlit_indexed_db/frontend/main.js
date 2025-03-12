@@ -9,7 +9,15 @@ function sendValue(value) {
 
 function onRender(event) {
 
-  const {action, db, version, objectStoreName, indexMode, key, values, accessMode} = event.detail.args;
+  const {
+    action, 
+    db, version, 
+    objectStoreName, 
+    indexMode, 
+    key, 
+    values, 
+    accessMode
+  } = event.detail.args;
 
   switch(action){
     case "creat_db":
@@ -31,7 +39,6 @@ function onRender(event) {
   
       if(!db.objectStoreNames.contains(objectStoreName)){
         db.createObjectStore(objectStoreName, indexMode);
-        console.log(objectStoreName + " foi criado com sucesso!");
       }
     }
 
@@ -41,19 +48,16 @@ function onRender(event) {
   }
 
   function cursorUpdateIndexedDB(){
-    console.log('cursor update inicializado')
 
     request = window.indexedDB.open(db, version);
 
     request.onsuccess = (event) => {
-      console.log('requisição ao banco bem sucedidia');
       let db = event.target.result;
       let objectStore = db.transaction([objectStoreName], "readwrite")
       .objectStore(objectStoreName);
 
       values.forEach((value) => {
         let found = false;
-        console.log('passando pelo valor: ')
         console.log(JSON.stringify(value));
 
         let cursorRequest = objectStore.openCursor();
@@ -62,14 +66,12 @@ function onRender(event) {
           let cursor = event.target.result;
           
           if (cursor){
-            console.log('cursor foi chamado');
             if(JSON.stringify(cursor.value) === JSON.stringify(value))
               found = true;
             cursor.continue();
           }
           else{
             if(!found){
-              console.log('fazendo update do valor: ', value);
               let requestUpdate = objectStore.put(value);
 
               requestUpdate.onerror = (event) => {
@@ -82,7 +84,7 @@ function onRender(event) {
     }
 
     request.onerror = (event) => {
-      console.log('falha na requisição do banco: ', event.target.error)
+      console.log('failed in requisition: ', event.target.error)
     }
 
   }
@@ -106,8 +108,8 @@ function onRender(event) {
           indexedDBValues.push(cursor.value);
           cursor.continue();
         }
+        // Allow streamlit to send data for Python
         Streamlit.setComponentValue(indexedDBValues);
-        console.log('sucesso ao passar os valores')
       }
       
       cursorRequest.onerror = (event) => {
@@ -120,7 +122,7 @@ function onRender(event) {
   window.rendered = true
 }
 
-// Adiciona o listener para renderização do Streamlit
+// Add listener for Streamlit rendering
 Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, onRender);
-// Marca o componente como pronto
+// Mark the component as ready
 Streamlit.setComponentReady();

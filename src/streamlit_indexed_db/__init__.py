@@ -12,18 +12,23 @@ _component_func = components.declare_component(
 )
 
 
+# create a local indexedDB
 def create_indexedDB(
     db: str,
+    # db defines what DB you is manipulating
     version: int,
+    # version defines what DB version you is manipulating
     object_store_name: str,
+    # object_store_name defines the store you will manipulate
     index_mode: Optional[dict] = None,
-    action='creat_db'
+    # define how the DB index the data
+    _action='creat_db'
 ):
     if index_mode is None:
         index_mode = {"autoIncrement": True}
 
     return _component_func(
-        action=action,
+        action=_action,
         db=db,
         version=version,
         objectStoreName=object_store_name,
@@ -36,10 +41,10 @@ def cursor_update_indexedDB(
     version: int,
     object_store_name: str,
     values: list[dict],
-    action='cursor_update'
+    _action='cursor_update'
 ):
     return _component_func(
-        action=action,
+        action=_action,
         db=db,
         version=version,
         objectStoreName=object_store_name,
@@ -51,24 +56,11 @@ def get_all_indexedDB(
     db: str,
     version: int,
     object_store_name: str,
-    action='get_all'
+    _action='get_all'
 ):
     return _component_func(
-        action=action,
+        action=_action,
         db=db,
         version=version,
         objectStoreName=object_store_name,
     )
-
-
-def main():
-    st.title('Testando indexedDB com Streamlit')
-    # create_indexedDB(db="TestDB", version=1, object_store_name="TestName")
-    # cursor_update_indexedDB(db="TestDB", version=1, object_store_name="TestName", values=[{"role": "ai", "content": "olá tudo bem? Como posso te ajudar"}, {"role": "user", "content": "você tem uma lista de ramais?"}])
-    all_values = get_all_indexedDB('TestDB', 1, 'TestName')
-    st.write('o indexed db foi inicializado no frontend')
-    st.write(all_values)
-
-
-if __name__ == "__main__":
-    main()
