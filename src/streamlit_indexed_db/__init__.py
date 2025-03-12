@@ -52,6 +52,7 @@ def cursor_update_indexedDB(
         values=values
     )
 
+
 # get all indexes in object store
 def get_all_indexedDB(
     db: str,
