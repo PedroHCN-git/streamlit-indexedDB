@@ -28,7 +28,10 @@ function onRender(event) {
       cursorUpdateIndexedDB();
       break;
     case "get_all":
-      getAllIndexedDB()
+      getAllIndexedDB();
+    case "clear_object_store":
+      clearObjectStore();
+      break;
   }
 
   function createIndexedDB(){
@@ -116,6 +119,26 @@ function onRender(event) {
         console.log('failed to get a value: ', event.target.error);
       }
 
+    }
+  }
+
+  function clearObjectStore(){
+    request = window.indexedDB.open(db, version);
+
+    reques.onsuccess = (event) => {
+      let db = event.target.result;
+      objectStore = db.transaction([objectStoreName], "readwrite")
+      .objectStore(objectStoreName)
+
+      clearRequest = objectStore.clear()
+
+      clearRequest.onsuccess = (event) => {
+        console.log('objectStore is cleaned');
+      }
+
+      clearRequest.onerror = (event) => {
+        console.log('failed to clear object store: ', event.target.error);
+      }
     }
   }
 

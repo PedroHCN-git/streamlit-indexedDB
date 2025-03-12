@@ -36,6 +36,7 @@ def create_indexedDB(
     )
 
 
+# put new indexes in objectStore and update existing indexes
 def cursor_update_indexedDB(
     db: str,
     version: int,
@@ -51,7 +52,7 @@ def cursor_update_indexedDB(
         values=values
     )
 
-
+# get all indexes in object store
 def get_all_indexedDB(
     db: str,
     version: int,
@@ -63,4 +64,18 @@ def get_all_indexedDB(
         db=db,
         version=version,
         objectStoreName=object_store_name,
+    )
+
+
+def clear_object_store(
+    db: str,
+    version: int,
+    object_store_name: str,
+    _action='clear_object_store'
+):
+    return _component_func(
+        action=_action,
+        db=db,
+        version=version,
+        objectStoreName=object_store_name
     )
