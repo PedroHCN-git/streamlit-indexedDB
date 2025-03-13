@@ -125,7 +125,7 @@ function onRender(event) {
   function clearObjectStore(){
     request = window.indexedDB.open(db, version);
 
-    reques.onsuccess = (event) => {
+    request.onsuccess = (event) => {
       let db = event.target.result;
       objectStore = db.transaction([objectStoreName], "readwrite")
       .objectStore(objectStoreName)
