@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setuptools.setup(
     name="streamlit-indexed-db",
-    version="0.1.1",
+    version="0.1.2",
     author="Pedro Corradini",
     author_email="pedro.hcorradini05@gmail.com",
     description="A streamlit componente that allows you to request and receive data from indexedDB",

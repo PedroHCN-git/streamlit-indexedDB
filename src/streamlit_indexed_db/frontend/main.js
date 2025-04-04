@@ -1,8 +1,3 @@
-// The `Streamlit` object exists because our html file includes
-// `streamlit-component-lib.js`.
-// If you get an error about "Streamlit" not being defined, that
-// means you're missing that file.
-
 function sendValue(value) {
   Streamlit.setComponentValue(value)
 }
@@ -24,11 +19,11 @@ function onRender(event) {
       createIndexedDB();
       break;
     case "cursor_update":
-      console.log('chamando cursor update')
       cursorUpdateIndexedDB();
       break;
     case "get_all":
       getAllIndexedDB();
+      break;
     case "clear_object_store":
       clearObjectStore();
       break;
@@ -61,7 +56,6 @@ function onRender(event) {
 
       values.forEach((value) => {
         let found = false;
-        console.log(JSON.stringify(value));
 
         let cursorRequest = objectStore.openCursor();
 
@@ -130,14 +124,19 @@ function onRender(event) {
       objectStore = db.transaction([objectStoreName], "readwrite")
       .objectStore(objectStoreName)
 
-      clearRequest = objectStore.clear()
+      if (sessionStorage.getItem('first_initi') == null) {
 
-      clearRequest.onsuccess = (event) => {
-        console.log('objectStore is cleaned');
-      }
+        clearRequest = objectStore.clear()
+  
+        clearRequest.onsuccess = (event) => {
+          console.log('objectStore is cleaned');
+        }
+  
+        clearRequest.onerror = (event) => {
+          console.log('failed to clear object store: ', event.target.error);
+        }
 
-      clearRequest.onerror = (event) => {
-        console.log('failed to clear object store: ', event.target.error);
+        sessionStorage.setItem('first_initi', 'true')
       }
     }
   }
